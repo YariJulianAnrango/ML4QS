@@ -176,14 +176,14 @@ class create_dataset:
 
 
 
-data = create_dataset('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/weather_2022_2023.txt', delta_t=10)
-data.merge_data_weather(dir_steps='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/StepCount.csv',
-                        dir_heart='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/apple-data/HeartRate.csv',
-                        dir_workout='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/Workout.csv',
+data = create_dataset('C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\weather_2022_2023.txt', delta_t=10)
+data.merge_data_weather(dir_steps='C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\StepCount.csv',
+                        dir_heart='C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\HeartRate.csv',
+                        dir_workout='C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Workout.csv',
                         start_date='2022-01-01 00:00:00',
                         end_date='2023-06-06 00:00:00')
 
-#data.data_frame.to_csv('merged.csv')
+data.data_frame.to_csv('New_weather_steps.csv')
 
 
 
