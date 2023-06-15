@@ -183,7 +183,7 @@ data.merge_data_weather(dir_steps='/Users/yarianrango/Documents/School/Master-AI
                         start_date='2022-01-01 00:00:00',
                         end_date='2023-06-06 00:00:00')
 
-#data.data_frame.to_csv('merged.csv')
+data.data_frame.to_csv('merged.csv')
 
 
 

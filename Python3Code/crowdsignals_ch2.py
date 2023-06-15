@@ -8,6 +8,7 @@
 ##############################################################
 
 # Import the relevant classes.
+from tqdm import tqdm
 from Chapter2.CreateDataset import CreateDataset
 from util.VisualizeDataset import VisualizeDataset
 from util import util
@@ -73,15 +74,15 @@ for milliseconds_per_instance in GRANULARITIES:
     dataset = dataset.data_table
 
     # Plot the data
-    DataViz = VisualizeDataset(__file__)
-
-    # Boxplot
-    DataViz.plot_dataset_boxplot(dataset, ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z'])
-
-    # Plot all data
-    DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'hr_watch_rate', 'light_phone_lux', 'mag_', 'press_phone_', 'label'],
-                                  ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'],
-                                  ['line', 'line', 'line', 'line', 'line', 'line', 'points', 'points'])
+    # DataViz = VisualizeDataset(__file__)
+    #
+    # # Boxplot
+    # DataViz.plot_dataset_boxplot(dataset, ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z'])
+    #
+    # # Plot all data
+    # DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'hr_watch_rate', 'light_phone_lux', 'mag_', 'press_phone_', 'label'],
+    #                               ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'],
+    #                               ['line', 'line', 'line', 'line', 'line', 'line', 'points', 'points'])
 
     # And print a summary of the dataset.
     util.print_statistics(dataset)

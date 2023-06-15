@@ -77,6 +77,7 @@ def main():
        
         fs = float(1000)/milliseconds_per_instance
         ws = int(float(10000)/milliseconds_per_instance)
+
         dataset = FreqAbs.abstract_frequency(dataset, ['acc_phone_x'], ws, fs)
         # Spectral analysis.
         DataViz.plot_dataset(dataset, ['acc_phone_x_max_freq', 'acc_phone_x_freq_weighted', 'acc_phone_x_pse', 'label'], ['like', 'like', 'like', 'like'], ['line', 'line', 'line','points'])
