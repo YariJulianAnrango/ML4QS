@@ -7,22 +7,23 @@
 #                                                            #
 ##############################################################
 
-from Chapter7.LearningAlgorithms import ClassificationAlgorithms
-from Chapter7.Evaluation import ClassificationEvaluation
-from Chapter7.LearningAlgorithms import RegressionAlgorithms
-from Chapter7.Evaluation import RegressionEvaluation
+from Python3Code.Chapter7.LearningAlgorithms import ClassificationAlgorithms
+from Python3Code.Chapter7.Evaluation import ClassificationEvaluation
+from Python3Code.Chapter7.LearningAlgorithms import RegressionAlgorithms
+from Python3Code.Chapter7.Evaluation import RegressionEvaluation
 from scipy.stats import pearsonr
 import sys
 import copy
 import numpy as np
 from operator import itemgetter
+from tqdm import tqdm
 
 # Specifies feature selection approaches for classification to identify the most important features.
 class FeatureSelectionClassification:
 
     # Forward selection for classification which selects a pre-defined number of features (max_features)
     # that show the best accuracy. We assume a decision tree learning for this purpose, but
-    # this can easily be changed. It return the best features.
+    # this can easily be changed. It returns the best features.
     def forward_selection(self, max_features, X_train, X_test, y_train, y_test, gridsearch):
         # Start with no features.
         ordered_features = []
@@ -69,7 +70,7 @@ class FeatureSelectionClassification:
 
     # Backward selection for classification which selects a pre-defined number of features (max_features)
     # that show the best accuracy. We assume a decision tree learning for this purpose, but
-    # this can easily be changed. It return the best features.
+    # this can easily be changed. It returns the best features.
     def backward_selection(self, max_features, X_train, y_train):
         # First select all features.
         selected_features = X_train.columns.tolist()
