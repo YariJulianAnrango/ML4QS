@@ -54,9 +54,28 @@ def Target_classification(Weather_steps_df):
     New_weather_steps = New_weather_steps[New_weather_steps['combined'].notna()]
     New_weather_steps = New_weather_steps.drop(columns=['temp_celsius', 'rain'])
 
+    for g in range(len(New_weather_steps)):
+        if New_weather_steps["value_workout"][g] == 'no workout':
+            New_weather_steps["value_workout"][g] = 1
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeWalking':
+            New_weather_steps["value_workout"][g] = 2
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeRunning':
+            New_weather_steps["value_workout"][g] = 3
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeCooldown':
+            New_weather_steps["value_workout"][g] = 4
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeTraditionalStrengthTraining':
+            New_weather_steps["value_workout"][g] = 5
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeSkatingSports':
+            New_weather_steps["value_workout"][g] = 6
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeClimbing':
+            New_weather_steps["value_workout"][g] = 7
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeCycling':
+            New_weather_steps["value_workout"][g] = 8
+        elif New_weather_steps["value_workout"][g] == 'HKWorkoutActivityTypeFunctionalStrengthTraining':
+            New_weather_steps["value_workout"][g] = 9
     return(New_weather_steps)
 
 Target_weather_steps = Target_classification("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\New_weather_steps.csv")
-Target_weather_steps.to_csv('target_weather_steps.csv')
+Target_weather_steps.to_csv('Target_weather_steps.csv')
 
 
