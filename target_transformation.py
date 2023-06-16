@@ -26,29 +26,29 @@ def Target_classification(Weather_steps_df):
     New_weather_steps["combined"] = np.nan
     for j in range(len(New_weather_steps)):
         if New_weather_steps["temp_celsius"][j] == "Freezing" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 1
+            New_weather_steps["combined"][j] = "Freezing0"
         elif New_weather_steps["temp_celsius"][j] == "Freezing" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 2
+            New_weather_steps["combined"][j] = "Freezing1"
         elif New_weather_steps["temp_celsius"][j] == "Cold" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 3
+            New_weather_steps["combined"][j] = "Cold0"
         elif New_weather_steps["temp_celsius"][j] == "Cold" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 4
+            New_weather_steps["combined"][j] = "Cold1"
         elif New_weather_steps["temp_celsius"][j] == "Chilly" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 5
+            New_weather_steps["combined"][j] = "Chilly0"
         elif New_weather_steps["temp_celsius"][j] == "Chilly" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 6
+            New_weather_steps["combined"][j] = "Chilly1"
         elif New_weather_steps["temp_celsius"][j] == "Comfortable" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 7
+            New_weather_steps["combined"][j] = "Comfortable0"
         elif New_weather_steps["temp_celsius"][j] == "Comfortable" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 8
+            New_weather_steps["combined"][j] = "Comfortable1"
         elif New_weather_steps["temp_celsius"][j] == "Warm" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 9
+            New_weather_steps["combined"][j] = "Warm0"
         elif New_weather_steps["temp_celsius"][j] == "Warm" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 10
+            New_weather_steps["combined"][j] = "Warm1"
         elif New_weather_steps["temp_celsius"][j] == "Hot" and New_weather_steps["rain"][j] == 0:
-            New_weather_steps["combined"][j] = 11
+            New_weather_steps["combined"][j] = "Hot0"
         elif New_weather_steps["temp_celsius"][j] == "Hot" and New_weather_steps["rain"][j] == 1:
-            New_weather_steps["combined"][j] = 12
+            New_weather_steps["combined"][j] = "Hot1"
     
     #remove na, and columns
     New_weather_steps = New_weather_steps[New_weather_steps['combined'].notna()]
