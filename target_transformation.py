@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-def Target_classification(Weather_steps_df):
+def Target_classification(New_weather_steps):
     #load dataset
-    New_weather_steps = pd.read_csv(Weather_steps_df)
+    New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
     New_weather_steps["value_heart"].replace(0, np.nan, inplace=True)
 
@@ -75,7 +75,7 @@ def Target_classification(Weather_steps_df):
             New_weather_steps["value_workout"][g] = 9
     return(New_weather_steps)
 
-Target_weather_steps = Target_classification("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\New_weather_steps.csv")
-Target_weather_steps.to_csv('Target_weather_steps.csv')
+#Target_weather_steps = Target_classification("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\New_weather_steps.csv")
+#Target_weather_steps.to_csv('Target_weather_steps.csv')
 
 

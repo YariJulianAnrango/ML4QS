@@ -3,8 +3,8 @@ import numpy as np
 from pykalman import KalmanFilter
 
 
-def interpolate(Target_df):
-    New_weather_steps = pd.read_csv(Target_df)
+def interpolate(New_weather_steps):
+    New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
 
     New_weather_steps['value_heart'] = New_weather_steps['value_heart'].interpolate()
@@ -12,8 +12,8 @@ def interpolate(Target_df):
 
 
 
-def kalman_filter(Target_df):
-    New_weather_steps = pd.read_csv(Target_df)
+def kalman_filter(New_weather_steps):
+    New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
 
     # Initialize the Kalman filter with the trivial transition and observation matrices.
@@ -32,10 +32,5 @@ def kalman_filter(Target_df):
     New_weather_steps["value_heart" + '_kalman'] = new_data
     return(New_weather_steps)
 
-method = "interpolate"
-if method == 'interpolate':
-    df = interpolate("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Target_weather_steps.csv")
-elif method == 'kalman_filter':
-    df = kalman_filter("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Target_weather_steps.csv")
 
-df.to_csv('Missing_weather_steps.csv')
+

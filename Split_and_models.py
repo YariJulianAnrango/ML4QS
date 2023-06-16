@@ -19,8 +19,8 @@ import matplotlib.pyplot as plt
 
 
 
-def Stratified_Split(weather_df):
-    New_weather_steps = pd.read_csv(weather_df)
+def Stratified_Split(New_weather_steps):
+    New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
     X = New_weather_steps.drop(columns=['combined', 'start', 'end'])
     y = New_weather_steps['combined']  
@@ -28,11 +28,11 @@ def Stratified_Split(weather_df):
                                                        
     #VALIDATIONSET
     train_X, val_X, train_y, val_y = train_test_split(train_X, train_y, test_size=0.2, stratify=train_y, random_state=42)
-    print("train/test set created, using stratified_split")
+    #print("train/test set created, using stratified_split")
     return(train_X, test_X, train_y, test_y, val_X, val_y)
 
-def kfold_crossvalidation(weather_df):
-    New_weather_steps = pd.read_csv(weather_df)
+def kfold_crossvalidation(New_weather_steps):
+    New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
     X = New_weather_steps.drop(columns=['combined', 'start', 'end'])
     y = New_weather_steps['combined']  
@@ -45,23 +45,22 @@ def kfold_crossvalidation(weather_df):
     #VALIDATIONSET
     val_X = test_X
     val_y = test_y
-    print("train/test set created, using kfold_crossvalidation")
+    #print("train/test set created, using kfold_crossvalidation")
     return(train_X, test_X, train_y, test_y, val_X, val_y)
 
 
 
-def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=5, gridsearch=True, print_model_details=False):
+def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=80, gridsearch=True, print_model_details=False):
     # Create the model
     if gridsearch:
-        print("hoi")
         tuned_parameters = [{'n_neighbors': [1, 2, 5, 10]}]
         knn = GridSearchCV(KNeighborsClassifier(), tuned_parameters, cv=5, scoring='accuracy')
     else:
         knn = KNeighborsClassifier(n_neighbors=n_neighbors)
-    print("KNN created")
+    #print("KNN created")
     # Fit the model
     knn.fit(train_X, train_y.values.ravel())
-    print("model fitted")
+    #print("model fitted")
     if gridsearch and print_model_details:
         print(knn.best_params_)
 
@@ -75,9 +74,9 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=5, gridsearch
     pred_test_y = knn.predict(val_X)
     frame_prob_training_y = pd.DataFrame(pred_prob_training_y, columns=knn.classes_)
     #frame_prob_test_y = pd.DataFrame(pred_prob_test_y, columns=knn.classes_)
-    print("predictions are made")
+    #print("predictions are made")
 
-    print("Accuracy:",metrics.accuracy_score(val_y, pred_test_y))
+    #print("Accuracy:",metrics.accuracy_score(val_y, pred_test_y))
 
     #plot
     k_values = [i for i in range (1,100)]
@@ -87,7 +86,7 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=5, gridsearch
     X = scaler.fit_transform(val_X)
 
     for k in k_values:
-        print(k)
+        #print(k)
         knn = KNeighborsClassifier(n_neighbors=k)
         score = cross_val_score(knn, X, val_y, cv=5)
         scores.append(np.mean(score))
