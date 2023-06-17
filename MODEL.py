@@ -14,6 +14,7 @@ print("packages loaded")
 
 #Choose the method and algorithm
 method = "interpolate"
+split_method = "kfold_crossvalidation"
 algorithm = "k_nearest_neighbor"
 
 #combine_data_
@@ -39,7 +40,6 @@ elif method == 'kalman_filter':
 weather_steps.to_csv('weather_steps.csv')
 
 #train/test split
-split_method = "kfold_crossvalidation"
 if split_method == "Stratified_Split":
      train_X, test_X, train_y, test_y, val_X, val_y = Stratified_Split('C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\weather_steps.csv')
 elif split_method == "kfold_crossvalidation":
