@@ -24,7 +24,7 @@ class FeatureSelectionClassification:
     # Forward selection for classification which selects a pre-defined number of features (max_features)
     # that show the best accuracy. We assume a decision tree learning for this purpose, but
     # this can easily be changed. It returns the best features.
-    def forward_selection(self, max_features, X_train, X_test, y_train, y_test, gridsearch):
+    def forward_selection(self, max_features, X_train, X_test, y_train, y_test):
         # Start with no features.
         ordered_features = []
         ordered_scores = []

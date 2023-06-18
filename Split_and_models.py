@@ -13,16 +13,14 @@ from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
-import seaborn as sns
+# import seaborn as sns
 import matplotlib.pyplot as plt
 
 
 
 
 def Stratified_Split(New_weather_steps):
-    New_weather_steps = pd.read_csv(New_weather_steps)
-    New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
-    X = New_weather_steps.drop(columns=['combined', 'start', 'end'])
+    X = New_weather_steps.drop(columns=['combined'])
     y = New_weather_steps['combined']  
     train_X, test_X, train_y, test_y= train_test_split(X, y, test_size=0.2, random_state=42)
                                                        
@@ -214,28 +212,28 @@ def feedforward_neural_network(train_X, train_y, val_X, hidden_layer_sizes=(100,
     frame_prob_test_y = pd.DataFrame(pred_prob_test_y, columns=nn.classes_)
 
     return pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y
-
-split_method = "kfold_crossvalidation"
-if split_method == "Stratified_Split":
-     train_X, test_X, train_y, test_y, val_X, val_y = Stratified_Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Missing_weather_steps.csv")
-elif split_method == "kfold_crossvalidation":
-     train_X, test_X, train_y, test_y, val_X, val_y = kfold_crossvalidation("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Missing_weather_steps.csv")
-else:
-    print("done")
-
-algorithm = "k_nearest_neighbor"
-if algorithm == "k_nearest_neighbor":
-    pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=80, gridsearch=False, print_model_details=False)
-elif algorithm == "support_vector_machine_without_kernel":
-    pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = support_vector_machine_without_kernel(train_X, train_y, val_X, C=1, tol=1e-3, max_iter=100, gridsearch=True, print_model_details=False)
-elif algorithm == "naive_bayes":
-    pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = naive_bayes(train_X, train_y, val_X)
-elif algorithm == "random_forest":
-    pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = random_forest(train_X, train_y, val_X, n_estimators=10, min_samples_leaf=5, criterion='gini', print_model_details=False, gridsearch=True)
-elif algorithm == "feedforward_neural_network":
-    pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = feedforward_neural_network(train_X, train_y, val_X, hidden_layer_sizes=(100,), max_iter=500, activation='logistic', alpha=0.0001, learning_rate='adaptive', gridsearch=True, print_model_details=False)
-else:
-    print("done")
+#
+# split_method = "kfold_crossvalidation"
+# if split_method == "Stratified_Split":
+#      train_X, test_X, train_y, test_y, val_X, val_y = Stratified_Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Missing_weather_steps.csv")
+# elif split_method == "kfold_crossvalidation":
+#      train_X, test_X, train_y, test_y, val_X, val_y = kfold_crossvalidation("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\Missing_weather_steps.csv")
+# else:
+#     print("done")
+#
+# algorithm = "k_nearest_neighbor"
+# if algorithm == "k_nearest_neighbor":
+#     pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=80, gridsearch=False, print_model_details=False)
+# elif algorithm == "support_vector_machine_without_kernel":
+#     pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = support_vector_machine_without_kernel(train_X, train_y, val_X, C=1, tol=1e-3, max_iter=100, gridsearch=True, print_model_details=False)
+# elif algorithm == "naive_bayes":
+#     pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = naive_bayes(train_X, train_y, val_X)
+# elif algorithm == "random_forest":
+#     pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = random_forest(train_X, train_y, val_X, n_estimators=10, min_samples_leaf=5, criterion='gini', print_model_details=False, gridsearch=True)
+# elif algorithm == "feedforward_neural_network":
+#     pred_training_y, pred_test_y, frame_prob_training_y, frame_prob_test_y = feedforward_neural_network(train_X, train_y, val_X, hidden_layer_sizes=(100,), max_iter=500, activation='logistic', alpha=0.0001, learning_rate='adaptive', gridsearch=True, print_model_details=False)
+# else:
+#     print("done")
 
 #accuracy =  accuracy_score(frame_prob_test_y, test_y)
 #print("Accuracy:", accuracy)
