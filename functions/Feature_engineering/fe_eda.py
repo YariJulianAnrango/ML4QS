@@ -7,8 +7,9 @@ scores = [0.468609, 0.571214, 0.580564, 0.589664, 0.594507, 0.595926, 0.596260, 
 
 df = pd.DataFrame({'values':scores, 'features':features})
 
-plt.plot(df.index, df['values'])
+plt.plot(pd.Categorical(df.index), df['values'])
 plt.title('Accuracy of model for feature selection')
 plt.xlabel('Feature amount')
 plt.ylabel('Accuracy')
+plt.locator_params(axis="x", integer=True)
 plt.savefig('feature_selection_acc.png')
