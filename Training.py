@@ -51,16 +51,19 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     #plot
     error_rate = []
     # searching k value upto  100
-    for i in range(1,100):
+    for i in range(1,2):
         # knn algorithm 
         knn = KNeighborsClassifier(n_neighbors=i)
         knn.fit(train_X, train_y.values.ravel())
         # testing the model
         pred_i = knn.predict(val_X)
+        #print("pred_i", pred_i)
+        #print("val_y", val_y)
+        #print("mean", np.mean(pred_i != val_y))
         error_rate.append(np.mean(pred_i != val_y))
     # Configure and plot error rate over k values
     plt.figure(figsize=(10,4))
-    plt.plot(range(1,100), error_rate, color='blue', linestyle='dashed', markersize=10)
+    plt.plot(range(1,2), error_rate, color='blue', linestyle='dashed', markersize=10)
     plt.title('Error Rate vs. K-Values')
     plt.xlabel('K-Values')
     plt.ylabel('Error Rate')
@@ -119,8 +122,6 @@ def random_forest(train_X, train_y, val_X, val_y):
     plt.savefig("Random_forest.png")
     
     
-    
-    
     param_grid = {'n_estimators': [50,100],
                   'min_samples_leaf':  [50,100],
                   'max_depth': [50,100]}
@@ -138,7 +139,7 @@ elif split_method == "kfold_crossvalidation":
 else:
     print("done")
 
-algorithm = "random_forest"
+algorithm = "k_nearest_neighbor"
 if algorithm == "k_nearest_neighbor":
     k_nearest_neighbor(train_X, train_y, val_X, val_y)
 elif algorithm == "naive_bayes":
