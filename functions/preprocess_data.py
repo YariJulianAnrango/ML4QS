@@ -5,6 +5,7 @@ from functions.Target_transformation.target_transformation import Target_classif
 from functions.Missing_data.missing_values import interpolate
 from functions.Feature_engineering.feature_engineering import Feature_Engineering
 from functions.train_test_split import temporal_split
+from functions.Feature_engineering.feature_engineering import normalise_dataset
 import time
 from functions.Feature_engineering.feature_engineering import one_hot_encoding
 
@@ -31,6 +32,8 @@ weather_steps = interpolate(weather_steps)
 
 weather_steps = one_hot_encoding(weather_steps)
 
+weather_steps = normalise_dataset(weather_steps
+                                  )
 # Train/test/val split
 train, test, val = temporal_split(weather_steps)
 
