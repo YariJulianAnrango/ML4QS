@@ -2,6 +2,7 @@ import pandas as pd
 from Python3Code.Chapter4.FrequencyAbstraction import FourierTransformation
 from Python3Code.Chapter7.FeatureSelection import FeatureSelectionClassification
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler
 
 
 class Feature_Engineering:
@@ -98,4 +99,15 @@ def one_hot_encoding(df, cols = 'value_workout'):
 
     return dataset
 
+def normalise_dataset(df):
+    dat = df.drop(['start','end','combined'], axis = 1)
+    cols = dat.columns
+    target = df[['start','end','combined']]
 
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled = scaler.fit_transform(dat)
+
+    scaled_df = pd.DataFrame(scaled, columns = cols)
+    res = pd.concat([scaled_df, target], axis = 1)
+
+    return res
