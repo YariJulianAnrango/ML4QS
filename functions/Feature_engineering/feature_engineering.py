@@ -2,9 +2,7 @@ import pandas as pd
 from Python3Code.Chapter4.FrequencyAbstraction import FourierTransformation
 from Python3Code.Chapter7.FeatureSelection import FeatureSelectionClassification
 from sklearn.preprocessing import OneHotEncoder
-from Split_and_models import Stratified_Split
 
-# Rolling functions
 
 class Feature_Engineering:
     def __init__(self, df):
@@ -52,6 +50,8 @@ class Feature_Engineering:
         for c in cols:
             self.data_frame = FreqAbs.abstract_frequency(self.data_frame, [c], ws, fs)
 
+        self.data_frame = self.data_frame.drop(['start','end'], axis = 1)
+
     def one_hot_encoding(self, cols = 'value_workout'):
         dataset = self.data_frame.drop(['start', 'end'], axis=1)
         enc = OneHotEncoder()
@@ -65,16 +65,37 @@ class Feature_Engineering:
 
         self.data_frame = dataset
 
-    def feature_selection(self, max_features):
-        dataset = self.data_frame.drop(['value_steps_max_freq', 'value_steps_freq_weighted'], axis=1)
-        if 'Unnamed: 0' in dataset.columns:
-            dataset = dataset.drop(['Unnamed: 0'], axis = 1)
-        dataset = dataset.dropna()
-        train_X, test_X, train_y, test_y, val_X, val_y = Stratified_Split(dataset)
+    def feature_selection(self, max_features, val):
+        train = self.data_frame.dropna()
+        train = train.drop(['value_steps_max_freq', 'value_steps_freq_weighted'], axis = 1)
+        train_X = train.loc[:,train.columns != 'combined']
+        train_y = train[['combined']]
+
+        print('val',val)
+        val = val.drop(['value_steps_max_freq', 'value_steps_freq_weighted'], axis = 1)
+        val = val.dropna()
+        val_X = val.loc[:,val.columns != 'combined']
+        val_y = val[['combined']]
+
+        print('train_x',train_X)
+        print('train_y',train_y)
+        print('val_x',val_X)
+        print('val_y',val_y)
         feat_sel = FeatureSelectionClassification()
         selected_features, ordered_features, ordered_scores = feat_sel.forward_selection(max_features, train_X, val_X, train_y, val_y)
 
-        return selected_features, ordered_features, ordered_scores, train_X, test_X, train_y, test_y, val_X, val_y
+        return selected_features, ordered_features, ordered_scores
 
+def one_hot_encoding(df, cols = 'value_workout'):
+    enc = OneHotEncoder()
+    transformed_mat = enc.fit_transform(df[[cols]])
+    transformed = pd.DataFrame.sparse.from_spmatrix(transformed_mat)
+    transformed.columns = enc.categories_[0]
+
+    dataset = pd.concat([df, transformed], axis=1)
+    dataset = dataset.drop(cols, axis=1)
+    dataset[enc.categories_[0]] = dataset[enc.categories_[0]].sparse.to_dense()
+
+    return dataset
 
 
