@@ -110,13 +110,14 @@ def random_forest(train_X, train_y, val_X, val_y):
     
     param_grid = {'n_estimators': randint(1, 100),
                 'min_samples_leaf':  randint(1, 250),
-                'max_depth': randint(1,2)}
+                'max_depth': randint(1,6)}
     # naive algorithm 
     for i in range(0,50):
         print(i)
         grid_search = RandomizedSearchCV(RandomForestClassifier(), param_grid, n_iter=1, cv=5)
         grid_search.fit(train_X, train_y)
         pred_i = grid_search.predict(val_X)
+        print("F1-score:",f1_score(val_y, pred_i, average='weighted'))
         error_rate.append(np.mean(pred_i != val_y))
         print(grid_search.best_params_)
         print(np.mean(pred_i != val_y))

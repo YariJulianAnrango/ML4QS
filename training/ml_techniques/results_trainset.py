@@ -111,6 +111,6 @@ if algorithm == "k_nearest_neighbor":
 elif algorithm == "naive_bayes":
     naive_bayes(train_X, train_y, val_X, val_y, var_smoothing=1)
 elif algorithm == "random_forest":
-    random_forest(train_X, train_y, val_X, val_y,  n_estimators=27, min_samples_leaf=21, max_depth= 1, criterion='gini', max_features = 1)
+    random_forest(train_X, train_y, val_X, val_y,  n_estimators=27, min_samples_leaf=21, max_depth= 3, criterion='gini', max_features = 1)
 else:
     print("done")
