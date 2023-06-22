@@ -46,9 +46,16 @@ def kfold_crossvalidation(New_weather_steps):
     print("train/test set created, using kfold_crossvalidation")
     return(train_X, train_y, val_X, val_y)
 
+def Split(val_csv, train_csv):
+    val = pd.read_csv(val_csv)
+    val_X = val.drop(columns=['combined', 'Unnamed: 0'])
+    val_y = val['combined']
+    train = pd.read_csv(train_csv)
+    train_X = train.drop(columns=['combined', 'Unnamed: 0'])
+    train_y = train['combined']
+    return(train_X, train_y, val_X, val_y)
 
-
-def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=9):
+def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors):
     # Create the model
     knn = KNeighborsClassifier(n_neighbors=n_neighbors)
     print("KNN created")
@@ -64,7 +71,7 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=9):
     print("recall_score:",recall_score(val_y, pred_val_y, average='weighted'))
     print("precision_score:",precision_score(val_y, pred_val_y, average='weighted'))
 
-def naive_bayes(train_X, train_y, val_X, val_y, var_smoothing=1.0):
+def naive_bayes(train_X, train_y, val_X, val_y, var_smoothing):
     # Create the model
     nb = GaussianNB(var_smoothing= var_smoothing)
     print("naive bayes created")
@@ -80,9 +87,9 @@ def naive_bayes(train_X, train_y, val_X, val_y, var_smoothing=1.0):
     print("precision_score:",precision_score(val_y, pred_val_y, average='weighted'))
     
 
-def random_forest(train_X, train_y, val_X, val_y, n_estimators=269, min_samples_leaf=10, criterion='gini', max_depth= 38):
+def random_forest(train_X, train_y, val_X, val_y, n_estimators, min_samples_leaf, max_depth, criterion, max_features):
 
-    rf = RandomForestClassifier(n_estimators=n_estimators, min_samples_leaf=min_samples_leaf, criterion=criterion, max_depth = max_depth)
+    rf = RandomForestClassifier(n_estimators=n_estimators, min_samples_leaf=min_samples_leaf, criterion=criterion, max_depth = max_depth, max_features = max_features)
     print("Random forest model created")
     rf.fit(train_X, train_y.values.ravel())
     print("the model is fitted")
@@ -95,20 +102,15 @@ def random_forest(train_X, train_y, val_X, val_y, n_estimators=269, min_samples_
     
 
 
-split_method = "Stratified_Split"
-if split_method == "Stratified_Split":
-     train_X, val_X, train_y, val_y= Stratified_Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-elif split_method == "kfold_crossvalidation":
-     train_X, val_X, train_y, val_y= kfold_crossvalidation("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-else:
-    print("done")
+train_X, train_y, val_X, val_y = Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\val.csv", "C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\train.csv")
 
-algorithm = "naive_bayes"
+
+algorithm = "random_forest"
 if algorithm == "k_nearest_neighbor":
-    k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=9)
+    k_nearest_neighbor(train_X, train_y, val_X, val_y, n_neighbors=20)
 elif algorithm == "naive_bayes":
-    naive_bayes(train_X, train_y, val_X, val_y, var_smoothing=1.0)
+    naive_bayes(train_X, train_y, val_X, val_y, var_smoothing=1)
 elif algorithm == "random_forest":
-    random_forest(train_X, train_y, val_X, val_y,  n_estimators=269, min_samples_leaf=10, criterion='gini', max_depth= 38)
+    random_forest(train_X, train_y, val_X, val_y,  n_estimators=27, min_samples_leaf=21, max_depth= 1, criterion='gini', max_features = 1)
 else:
     print("done")
