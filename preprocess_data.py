@@ -20,7 +20,7 @@ print('This will take a while...')
 #                         start_date='2022-01-01 00:00:00',
 #                         end_date='2023-06-06 00:00:00')
 
-dat = pd.read_csv('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/aggregated_data/merged.csv', index_col = 0)
+dat = pd.read_csv('C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\aggregated_data\\merged.csv', index_col = 0)
 
 # Target classification
 print('target classification')

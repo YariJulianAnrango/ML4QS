@@ -20,35 +20,6 @@ from pprint import pprint
 
 
 
-def Stratified_Split(New_weather_steps):
-    New_weather_steps = pd.read_csv(New_weather_steps)
-    #New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
-    X = New_weather_steps.drop(columns=['combined', 'Unnamed: 0.1', 'Unnamed: 0'])
-    y = New_weather_steps['combined']  
-    train_X, test_X, train_y, test_y= train_test_split(X, y, test_size=0.2, random_state=13)
-                                                       
-    #VALIDATIONSET
-    train_X, val_X, train_y, val_y = train_test_split(train_X, train_y, test_size=0.2, stratify=train_y, random_state=13)
-    print("train/test set created, using stratified_split")
-    return(train_X, train_y, val_X, val_y)
-
-def kfold_crossvalidation(New_weather_steps):
-    New_weather_steps = pd.read_csv(New_weather_steps)
-    #New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
-    X = X = New_weather_steps.drop(columns=['combined', 'Unnamed: 0.1', 'Unnamed: 0'])
-    y = New_weather_steps['combined']  
-    k = 5
-    kf = KFold(n_splits=k, shuffle=True, random_state=12)
-    for train_index , test_index in kf.split(X):
-        train_X , test_X = X.iloc[train_index,:],X.iloc[test_index,:]
-        train_y , test_y = y[train_index] , y[test_index]
-    
-    #VALIDATIONSET
-    val_X = test_X
-    val_y = test_y
-    print("train/test set created, using kfold_crossvalidation")
-    return(train_X, train_y, val_X, val_y)
-
 def Split(val_csv, train_csv):
     val = pd.read_csv(val_csv)
     val_X = val.drop(columns=['combined', 'Unnamed: 0'])
