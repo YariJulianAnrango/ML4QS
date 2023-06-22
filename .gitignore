@@ -53,3 +53,5 @@ training/test.csv
 training/train.csv
 training/val.csv
 training/ml_techniques/Training.py
+datacheck.csv
+Random_forest.png

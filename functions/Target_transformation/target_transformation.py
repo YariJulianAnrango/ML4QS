@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 def Target_classification(df):
     New_weather_steps = df
-
+    print(New_weather_steps)
     New_weather_steps["value_heart"].replace(0, np.nan, inplace=True)
 
     # #categorize weather
@@ -56,6 +56,11 @@ def Target_classification(df):
     New_weather_steps = New_weather_steps.drop(columns=['temp_celsius', 'rain'])
 
     return(New_weather_steps)
+
+
+df = pd.read_csv("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\aggregated_data\\merged.csv")
+datacheck = Target_classification(df)
+datacheck.to_csv("datacheck.csv")
 
 
 

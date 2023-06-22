@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.tree import plot_tree
+from sklearn.metrics import classification_report
+from scipy.stats import uniform, truncnorm, randint
+from pprint import pprint
 
 
 
@@ -46,12 +49,21 @@ def kfold_crossvalidation(New_weather_steps):
     print("train/test set created, using kfold_crossvalidation")
     return(train_X, train_y, val_X, val_y)
 
+def Split(val_csv, train_csv):
+    val = pd.read_csv(val_csv)
+    val_X = val.drop(columns=['combined', 'Unnamed: 0'])
+    val_y = val['combined']
+    train = pd.read_csv(train_csv)
+    train_X = train.drop(columns=['combined', 'Unnamed: 0'])
+    train_y = train['combined']
+    return(train_X, train_y, val_X, val_y)
 
 def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     #plot
     error_rate = []
     # searching k value upto  100
     for i in range(1,100):
+        print(i)
         # knn algorithm 
         knn = KNeighborsClassifier(n_neighbors=i)
         knn.fit(train_X, train_y.values.ravel())
@@ -64,7 +76,7 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     plt.title('Error Rate vs. K-Values')
     plt.xlabel('K-Values')
     plt.ylabel('Error Rate')
-    plt.savefig("line_plot.png")
+    plt.savefig("KNN.png")
 
 def naive_bayes(train_X, train_y, val_X, val_y):
     #tuning
@@ -79,7 +91,7 @@ def naive_bayes(train_X, train_y, val_X, val_y):
     for i in range(0,3):
         # naive algorithm 
         nb = GaussianNB(var_smoothing=i)
-        nb.fit(train_X, train_y.values.ravel())
+        nb.fit(train_X, train_y)
         # testing the model
         pred_i = nb.predict(val_X)
         error_rate.append(np.mean(pred_i != val_y))
@@ -96,19 +108,20 @@ def random_forest(train_X, train_y, val_X, val_y):
     # parameter tuning
     error_rate = []
     
-    param_grid = {'n_estimators': randint(50, 300),
-                    'min_samples_leaf':  randint(1, 20),
-                    'max_depth': randint(20, 50)}
+    param_grid = {'n_estimators': randint(1, 100),
+                'min_samples_leaf':  randint(1, 250),
+                'max_depth': randint(1,6)}
     # naive algorithm 
     for i in range(0,50):
+        print(i)
         grid_search = RandomizedSearchCV(RandomForestClassifier(), param_grid, n_iter=1, cv=5)
-        print("grid search made")
-        grid_search.fit(train_X, train_y.values.ravel())
-        print("model fitted")
-        # testing the model
+        grid_search.fit(train_X, train_y)
         pred_i = grid_search.predict(val_X)
-        print("predictions made")
+        print("F1-score:",f1_score(val_y, pred_i, average='weighted'))
         error_rate.append(np.mean(pred_i != val_y))
+        print(grid_search.best_params_)
+        print(np.mean(pred_i != val_y))
+        
     
     # Configure and plot error rate over k values
     plt.figure(figsize=(10, 51))
@@ -121,22 +134,34 @@ def random_forest(train_X, train_y, val_X, val_y):
     
     
     
-    param_grid = {'n_estimators': [50,100],
-                  'min_samples_leaf':  [50,100],
-                  'max_depth': [50,100]}
-    grid_search = GridSearchCV(RandomForestClassifier(), param_grid, cv=5)
-    grid_search = RandomizedSearchCV(RandomForestClassifier(), param_grid, n_iter=50 , cv=5)
-    grid_search.fit(train_X, train_y.values.ravel())
-    print(grid_search.best_params_)
-    print(grid_search.best_estimator_)
+    #param_grid = {'n_estimators': [110, 120],
+    #              'min_samples_leaf':  [180, 190, 200],
+    #              'max_depth': [5, 10, 15]}
+    #grid_search = GridSearchCV(RandomForestClassifier(), param_grid, cv=5)
+    #grid_search = GridSearchCV(RandomForestClassifier(), param_grid, cv=5)
+    #grid_search = RandomizedSearchCV(RandomForestClassifier(), param_grid, n_iter=10 , cv=5)
+    #grid_search.fit(train_X, train_y.values.ravel())
+    #print(grid_search.best_params_)
+    #grid_predictions = grid_search.predict(val_X) 
+   
+    # print classification report 
+    #print(classification_report(val_y, grid_predictions)) 
 
-split_method = "kfold_crossvalidation"
-if split_method == "Stratified_Split":
-     train_X, train_y, val_X, val_y = Stratified_Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-elif split_method == "kfold_crossvalidation":
-     train_X, train_y, val_X, val_y = kfold_crossvalidation("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-else:
-    print("done")
+def random_forestt(train_X, train_y, val_X, val_y):
+    model_params = {'n_estimators': randint(10, 300),
+                'min_samples_leaf':  randint(50, 250),
+                "max_features": 1,
+                'max_depth': randint(10, 50),
+                'criterion':['gini', 'entropy'],
+                }, 
+    
+    clf = RandomizedSearchCV(RandomForestClassifier(), model_params, n_iter=20, cv=5, random_state=1)
+    model = clf.fit(train_X, train_y)
+    
+    pprint(model.best_params_)
+    
+
+train_X, train_y, val_X, val_y = Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\val.csv", "C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\train.csv")
 
 algorithm = "random_forest"
 if algorithm == "k_nearest_neighbor":
