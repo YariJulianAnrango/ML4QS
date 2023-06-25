@@ -11,36 +11,28 @@ import numpy as np
 
 
 class LSTMNetwork(nn.Module):
-    def __init__(self, input_size, hidden_size,  lstm_layers, num_classes = 12):
+    def __init__(self, input_size, hidden_size, num_classes, lstm_layers):
         super(LSTMNetwork, self).__init__()
-        self.lstm_layers = lstm_layers
         self.hidden_size = hidden_size
 
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers=lstm_layers)
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers = lstm_layers)
         self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(0.2)
         self.linear1 = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
-        print(x.size())
-        h0 = torch.zeros(self.lstm_layers, x.size(1), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.lstm_layers, x.size(1), self.hidden_size).to(x.device)
-        x, _ = self.lstm(x,(h0, c0))
+        x, _ = self.lstm(x)
         x = self.relu(x)
-        x = self.dropout(x)
         x = self.linear1(x)
-        return x.to(torch.float32)
+        return x
 
 
-def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=256, num_classes=12, lstm_layers=2):
+def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=512, num_classes=12, lstm_layers=2):
     label_encoder = LabelEncoder()
     train_y = label_encoder.fit_transform(train_y)
 
     inputs = torch.tensor(train_X.values, dtype=torch.float32)
     inputs = inputs.unsqueeze(0).transpose(0, 1)
-    labels = torch.tensor(train_y, dtype=torch.float32)
-    unique_labels = torch.unique(labels)
-    print(unique_labels)
+    labels = torch.tensor(train_y, dtype=torch.long)
 
     input_size = inputs.size(-1)
     model = LSTMNetwork(input_size, hidden_size, num_classes, lstm_layers)
@@ -59,8 +51,7 @@ def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=256, num_clas
     for epoch in range(num_epochs):
         outputs = model(inputs)
         outputs = outputs.squeeze()
-        print(outputs.size())
-        print(labels.size())
+
         loss = criterion(outputs, labels)
 
         loss_epochs.append(loss.item())
@@ -82,7 +73,7 @@ def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=256, num_clas
     plt.title('Cross entropy loss of LSTM models per epoch')
     plt.xlabel('epoch')
     plt.ylabel('loss')
-    plt.savefig('plot1')
+    plt.savefig('plot2')
 
 
 def load_lstm(dat_X, model_dir, hidden_size=256, num_classes=12, lstm_layers=1):
@@ -98,7 +89,7 @@ def load_lstm(dat_X, model_dir, hidden_size=256, num_classes=12, lstm_layers=1):
 
 def optimize_hyperparameters(train_X,
                              train_y,
-                             hidden_size = [50, 256],
+                             hidden_size = [50, 256, 512],
                              lstm_layers = [1,2]):
     label_encoder = LabelEncoder()
     train_y = label_encoder.fit_transform(train_y)
@@ -115,7 +106,8 @@ def optimize_hyperparameters(train_X,
         verbose=2,
         module__input_size = input_size,
         max_epochs = 100,
-        optimizer__lr = 0.01
+        optimizer__lr = 0.01,
+        module__num_classes = 12
     )
     param_grid = {
         'module__hidden_size': hidden_size,
