@@ -12,7 +12,7 @@ from functions.Feature_engineering.feature_engineering import one_hot_encoding
 
 start = time.time()
 print('This will take a while...')
-#combine_data_
+#
 # dat = create_dataset('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/weather_2022_2023.txt', delta_t=10)
 # dat.merge_data_weather(dir_steps='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/StepCount.csv',
 #                         dir_heart='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/data_used/HeartRate.csv',
@@ -20,7 +20,7 @@ print('This will take a while...')
 #                         start_date='2022-01-01 00:00:00',
 #                         end_date='2023-06-06 00:00:00')
 
-dat = pd.read_csv('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/aggregated_data/merged.csv', index_col = 0)
+dat = pd.read_csv('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/aggregated_data/merged.csv')
 
 # Target classification
 print('target classification')
