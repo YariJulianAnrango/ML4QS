@@ -26,7 +26,7 @@ class LSTMNetwork(nn.Module):
         return x
 
 
-def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=512, num_classes=12, lstm_layers=2):
+def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=50, num_classes=12, lstm_layers=2):
     label_encoder = LabelEncoder()
     train_y = label_encoder.fit_transform(train_y)
 
@@ -76,7 +76,7 @@ def train_lstm(train_X, train_y, num_epochs, m1=False, hidden_size=512, num_clas
     plt.savefig('plot2')
 
 
-def load_lstm(dat_X, model_dir, hidden_size=256, num_classes=12, lstm_layers=1):
+def load_lstm(dat_X, model_dir, hidden_size=50, num_classes=12, lstm_layers=1):
     inputs = torch.tensor(dat_X.values, dtype=torch.float32)
 
     input_size = inputs.size(-1)

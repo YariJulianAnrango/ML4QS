@@ -18,7 +18,7 @@ label_encoder = LabelEncoder()
 val_y = label_encoder.fit_transform(val_y)
 test_y = label_encoder.fit_transform(test_y)
 
-model = load_lstm(val_X, model_dir='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/models/lstm_2023-06-25_15:04:03.pt')
+model = load_lstm(val_X, model_dir='/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/models/lstm_2023-06-25_20:37:39.pt')
 # Evaluation
 model.eval()
 

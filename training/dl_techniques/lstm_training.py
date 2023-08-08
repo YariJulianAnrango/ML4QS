@@ -2,7 +2,7 @@ import pandas as pd
 from training.dl_techniques.lstm import train_lstm
 from training.dl_techniques.lstm import optimize_hyperparameters
 
-train = pd.read_csv('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/training/train.csv', index_col=0).reset_index(drop=True)
+train = pd.read_csv('/Users/yarianrango/Documents/School/Master-AI-VU/ML quantified/ML4QS/training/val.csv', index_col=0).reset_index(drop=True)
 
 # batch = train.loc[:round(len(train)*0.3),:]
 
