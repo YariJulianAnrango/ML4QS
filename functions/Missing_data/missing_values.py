@@ -2,13 +2,16 @@ import pandas as pd
 import numpy as np
 from pykalman import KalmanFilter
 
+#In EDA.ipynb zagen we dat 'value_heart' van merged.csv veel Nan heeft. Deze Nan willen we vervangen voor realistische waardes
+#Om zo'n inputation te doen, kijken we naar interpolate and kalman_filter. 
 
+#interpolate. Stel je hebt: 7,Nan,8, Dan maakt de interpolate zelf van de Nan een 7,5
 def interpolate(New_weather_steps):
     New_weather_steps['value_heart'] = New_weather_steps['value_heart'].interpolate()
     return(New_weather_steps)
 
 
-
+#
 def kalman_filter(New_weather_steps):
     New_weather_steps = pd.read_csv(New_weather_steps)
     New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
@@ -30,6 +33,7 @@ def kalman_filter(New_weather_steps):
     return(New_weather_steps)
 
 
-#df = [3,3,None,7,6,2,None,None,75]
-#dff = interpolate(df)
-#print(dff)
+#check of de functie van interpolate het doet (duurt nog geen 1 sec bij mij)
+df = pd.read_csv("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\aggregated_data\\merged.csv")
+dff = interpolate(df)
+print(dff['value_heart'])

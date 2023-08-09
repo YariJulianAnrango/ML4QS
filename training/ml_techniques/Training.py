@@ -15,7 +15,9 @@ from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.tree import plot_tree
 
-
+#In dit bestand wordt parameter tuning gedaan van KNN, naive bayes en Random forest
+#De validation en train split zijn al gemaakt in val.csv en train.csv. De functie split zorgt ervoor dat deze csv files
+#omgezet kunnen worden naar bruikbare data
 
 def Split(val_csv, train_csv):
     val = pd.read_csv(val_csv)
@@ -26,7 +28,8 @@ def Split(val_csv, train_csv):
     train_y = train['combined']
     return(train_X, train_y, val_X, val_y)
 
-
+#Bij het kijken naar de parameter K van KNN wordt een plot gemaakt die de error_rate weergeeft. Daar waar de error_rate
+#Het laagst is, dat is de beste K
 def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     #plot
     error_rate = []
@@ -47,6 +50,8 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     plt.ylabel('Error Rate')
     plt.savefig("line_plot.png")
 
+#Bij naive bayes wordt gekeken naar de parameter var_smoothing. Die wordt geoptimaliseerd door te kijken naar 
+#de parameter grid
 def naive_bayes(train_X, train_y, val_X, val_y):
     #tuning
     nb = GaussianNB()
@@ -72,6 +77,11 @@ def naive_bayes(train_X, train_y, val_X, val_y):
     plt.ylabel('Error Rate')
     plt.savefig("Naive_bayes.png")
 
+
+#Bij deze werkt het iets anders, omdat ik de code niet zo kon krijgen dat hij daadwerkelijk trained net zoals 
+#bij KNN en Naive bayes. Op internet vond ik ook niks, dus heb ik het zo gedaan.
+#Hij genereerd telkens random waardes voor N_estimator, min_sample_leaf en max_depth. Daarbij rekent hij de f1-score
+#Na 100 runs kijk je gewoon in het lijstje wat geprint is en welke combinatie de hoogste f1 score krijgt.
 def random_forest(train_X, train_y, val_X, val_y):
     
     # parameter tuning
@@ -93,15 +103,14 @@ def random_forest(train_X, train_y, val_X, val_y):
         print(grid_search.best_params_)
         error_rate.append(np.mean(pred_i != val_y))
     
+    #Niet te veel aandacht leggen op de plot, want die heb ik niet meer gebruikt
     # Configure and plot error rate over k values
     plt.figure(figsize=(10, 101))
     plt.plot(range(1, 101), error_rate, color='blue', linestyle='dashed', markersize=10)
     plt.title('Error Rate vs. Random forest')
     plt.xlabel('Random forest')
     plt.ylabel('Error Rate')
-    plt.savefig("Random_forest.png")
-    
-    
+    plt.savefig("Random_forest.png")   
     
     
     param_grid = {'n_estimators': [50,100],

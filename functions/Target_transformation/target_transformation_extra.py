@@ -4,18 +4,27 @@ from tqdm import tqdm
 
 #Het begint bij merged.csv. Deze is in combine_data.py aangemaakt. De data is hierin verkort naar bruikbare variabelen
 #Deze dataset wordt toegepast in deze Target_classification functie
+#De functie maakt aan het einde de dataset aan genaamd 'datacheck.csv'. Deze wordt gebruikt in EDA.ipynb
 
-#
+
+
 def Target_classification(df):
     New_weather_steps = df
     #Alle zero values van de kolom Value_heart worden omgezet naar None
     New_weather_steps["value_heart"].replace(0, np.nan, inplace=True)
-    #Een nieuwe kolom 'mean_values' wordt aangemaakt waarin alle 
+
+    #Een nieuwe kolom 'mean_values' wordt aangemaakt waarin per maand een gemiddelde temperatuur staat (om de 10 minuten is er een meting
+    # dus 6 metingen per uur. 24 uur per dag. 30 dagen in de maand. Dat is 6*24*30 metingen waar een gemiddelde van wordt bepaald)
     New_weather_steps["mean_values"] = New_weather_steps.groupby(New_weather_steps.index // (6*24*30))["temp_celsius"].transform("mean")
+    
+    #Vervolgens worden de werkelijke temperatuur waardes afgetrokken van het gemiddelde temperatuur van die maand. Dit 
+    #zorgt er namelijk voor dat een temperatuur relatief is. 20 graden is in februari super warm, maar in juli is dat niet zo warm.
+    #Deze waardes worden in de kolom 'mean_temp' gezet.
     New_weather_steps["mean_temp"] = New_weather_steps["temp_celsius"] - New_weather_steps["mean_values"]
 
 
-    #create combined column
+    #Aan de hand van 'mean_temp' en 'rain' wordt bepaald wat de weerconditie is. Wanneer het relatief zeer koud 
+    #is en het regent, dan wordt het element in kolom 'combined' toegewezen aan de waarde 'ExtraExtraLow1'
     New_weather_steps["combined"] = np.nan
     for j in tqdm(range(len(New_weather_steps))):
         if New_weather_steps["mean_temp"][j] < (-100) and New_weather_steps["rain"][j] == 0:
@@ -57,7 +66,10 @@ def Target_classification(df):
 
     return(New_weather_steps)
 
-df = pd.read_csv("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\aggregated_data\\merged.csv")
-dff = Target_classification(df)
-dff.to_csv('datacheck.csv')
+
+#De datacheck.csv wordt aangemaakt zodat hier vervolgens EDA op gedaan kan worden. Deze hoef je maar 1x te runnen.
+#Momenteel staat hij al opgeslagen, dus heb ik hem gecommend.
+#df = pd.read_csv("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\aggregated_data\\merged.csv")
+#dff = Target_classification(df)
+#dff.to_csv('datacheck.csv')
 

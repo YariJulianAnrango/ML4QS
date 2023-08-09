@@ -15,7 +15,9 @@ from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.tree import plot_tree
 
-
+#De beste parameters die je heb gekozen uit training.py voeg je in bij regel 80, 82 en 84
+#Dan run je de code en kijkt wat de scores zijn.
+#Deze vergelijk je vervolgens met de resultaten uit results_testset.py
 
 def Split(val_csv, train_csv):
     val = pd.read_csv(val_csv)
