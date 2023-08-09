@@ -17,33 +17,13 @@ from sklearn.tree import plot_tree
 
 
 
-def Stratified_Split(New_weather_steps):
-    New_weather_steps = pd.read_csv(New_weather_steps)
-    #New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
-    X = New_weather_steps.drop(columns=['combined', 'Unnamed: 0.1', 'Unnamed: 0'])
-    y = New_weather_steps['combined']  
-    train_X, test_X, train_y, test_y= train_test_split(X, y, test_size=0.2, random_state=13)
-                                                       
-    #VALIDATIONSET
-    train_X, val_X, train_y, val_y = train_test_split(train_X, train_y, test_size=0.2, stratify=train_y, random_state=13)
-    print("train/test set created, using stratified_split")
-    return(train_X, train_y, val_X, val_y)
-
-def kfold_crossvalidation(New_weather_steps):
-    New_weather_steps = pd.read_csv(New_weather_steps)
-    #New_weather_steps = New_weather_steps.drop("Unnamed: 0",axis=1)
-    X = X = New_weather_steps.drop(columns=['combined', 'Unnamed: 0.1', 'Unnamed: 0'])
-    y = New_weather_steps['combined']  
-    k = 5
-    kf = KFold(n_splits=k, shuffle=True, random_state=12)
-    for train_index , test_index in kf.split(X):
-        train_X , test_X = X.iloc[train_index,:],X.iloc[test_index,:]
-        train_y , test_y = y[train_index] , y[test_index]
-    
-    #VALIDATIONSET
-    val_X = test_X
-    val_y = test_y
-    print("train/test set created, using kfold_crossvalidation")
+def Split(val_csv, train_csv):
+    val = pd.read_csv(val_csv)
+    val_X = val.drop(columns=['combined', 'Unnamed: 0'])
+    val_y = val['combined']
+    train = pd.read_csv(train_csv)
+    train_X = train.drop(columns=['combined', 'Unnamed: 0'])
+    train_y = train['combined']
     return(train_X, train_y, val_X, val_y)
 
 
@@ -52,6 +32,7 @@ def k_nearest_neighbor(train_X, train_y, val_X, val_y):
     error_rate = []
     # searching k value upto  100
     for i in range(1,100):
+        print(i)
         # knn algorithm 
         knn = KNeighborsClassifier(n_neighbors=i)
         knn.fit(train_X, train_y.values.ravel())
@@ -100,19 +81,21 @@ def random_forest(train_X, train_y, val_X, val_y):
                     'min_samples_leaf':  randint(1, 20),
                     'max_depth': randint(20, 50)}
     # naive algorithm 
-    for i in range(0,50):
+    for i in range(0,100):
+        print(i)
         grid_search = RandomizedSearchCV(RandomForestClassifier(), param_grid, n_iter=1, cv=5)
-        print("grid search made")
+        #print("grid search made")
         grid_search.fit(train_X, train_y.values.ravel())
-        print("model fitted")
+        #print("model fitted")
         # testing the model
         pred_i = grid_search.predict(val_X)
-        print("predictions made")
+        print("F1-score:",f1_score(val_y, pred_i, average='weighted'))
+        print(grid_search.best_params_)
         error_rate.append(np.mean(pred_i != val_y))
     
     # Configure and plot error rate over k values
-    plt.figure(figsize=(10, 51))
-    plt.plot(range(1, 51), error_rate, color='blue', linestyle='dashed', markersize=10)
+    plt.figure(figsize=(10, 101))
+    plt.plot(range(1, 101), error_rate, color='blue', linestyle='dashed', markersize=10)
     plt.title('Error Rate vs. Random forest')
     plt.xlabel('Random forest')
     plt.ylabel('Error Rate')
@@ -130,15 +113,9 @@ def random_forest(train_X, train_y, val_X, val_y):
     print(grid_search.best_params_)
     print(grid_search.best_estimator_)
 
-split_method = "kfold_crossvalidation"
-if split_method == "Stratified_Split":
-     train_X, train_y, val_X, val_y = Stratified_Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-elif split_method == "kfold_crossvalidation":
-     train_X, train_y, val_X, val_y = kfold_crossvalidation("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\data_used\\features_selected_new.csv")
-else:
-    print("done")
+train_X, train_y, val_X, val_y = Split("C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\val.csv", "C:\\Users\\irene\\OneDrive\\Bureaublad\\ML\\ML4QS\\training\\train.csv")
 
-algorithm = "random_forest"
+algorithm = "naive_bayes"
 if algorithm == "k_nearest_neighbor":
     k_nearest_neighbor(train_X, train_y, val_X, val_y)
 elif algorithm == "naive_bayes":

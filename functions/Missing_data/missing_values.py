@@ -30,4 +30,6 @@ def kalman_filter(New_weather_steps):
     return(New_weather_steps)
 
 
-
+#df = [3,3,None,7,6,2,None,None,75]
+#dff = interpolate(df)
+#print(dff)

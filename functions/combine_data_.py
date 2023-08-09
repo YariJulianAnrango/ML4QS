@@ -71,7 +71,7 @@ class create_dataset:
         delta_timeformat = str(self.delta_t)+'min'
         print('fixing steps data')
         dat = pd.read_csv(dir)
-        dat = dat[pd.to_datetime(dat['startDate']).dt.strftime('%Y-%m') == pd.to_datetime(start_date).strftime(
+        dat = dat[pd.to_datetime(dat['startDate']).dt.strftime('%Y-%m') >= pd.to_datetime(start_date).strftime(
             '%Y-%m')].reset_index(drop=True)
         dat_start = pd.to_datetime(pd.to_datetime(dat['startDate']).dt.strftime('%Y-%m-%d %H:%M:%S'))
         dat_end = pd.to_datetime(pd.to_datetime(dat['endDate']).dt.strftime('%Y-%m-%d %H:%M:%S'))
